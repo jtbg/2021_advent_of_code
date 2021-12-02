@@ -9,6 +9,7 @@ with open(config['ASSETS']['input_file'], 'r') as f:
 count_readings = 0
 count_increased_depths = 0
 for depth in readings:
+    depth = int(depth)
     try:
         if depth > prev_depth:
             count_increased_depths += 1
