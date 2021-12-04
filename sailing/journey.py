@@ -26,7 +26,7 @@ class Course:
             print(f"Unexpected {err=}, {type(err)=}")
             raise
 
-    def import_course(self, navfile_loc='./assets/course.txt'):
+    def import_course(self, navfile_loc='./assets/course'):
         with open(navfile_loc, 'r') as f:
             for line in f.readlines():
                 direction, magnitude = line.strip().split(" ")

@@ -6,7 +6,7 @@ class Sonar:
         self.num_readings = 0
         self.readings = []
 
-    def bulk_input(self, report_loc="./assets/sonar_readings.txt"):
+    def bulk_input(self, report_loc="./assets/sonar_readings"):
         with open(report_loc, 'r') as f:
             for line in f.readlines():
                 self.add_reading(line)

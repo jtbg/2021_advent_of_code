@@ -28,7 +28,7 @@ class Levels:
             bitwise.setdefault(iteration, {0: 0, 1: 0})
             bitwise[iteration][int(this_bit)] += 1
 
-    def bulk_input(self, report_loc="./assets/diagnostic_report.txt"):
+    def bulk_input(self, report_loc="./assets/diagnostic_report"):
         with open(report_loc, 'r') as f:
             for line in f.readlines():
                 line = line.strip()
