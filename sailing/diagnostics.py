@@ -1,41 +1,7 @@
 import logging
 
-from coolname import generate
 
-
-class Vessel:
-    def __init__(self):
-        self.name = 'The ' + ' '.join(x.capitalize() for x in generate(2))
-        self.position = {'x': 0, 'y': 0, }
-        self.odometer = 0
-        self.diagnostics = Diagnostics()
-
-
-class Submarine(Vessel):
-    def __init__(self):
-        super().__init__()
-        self.position['depth'] = 0
-        self.position['aim'] = 0
-
-    def move(self, direction, magnitude):
-        magnitude = int(magnitude)
-        self.odometer += 1
-        if direction == "forward":
-            self.position['x'] += magnitude
-            self.position['depth'] += magnitude * self.position['aim']
-        elif direction == "down":
-            self.position['aim'] += magnitude
-        elif direction == "up":
-            self.position['aim'] -= magnitude
-        else:
-            logging.error(f'''invalid movement {direction} {magnitude}''')
-            logging.debug(f'''
-        Moved {direction} {magnitude}.
-            {self.position.__dict__}
-        ''')
-
-
-class Diagnostics:
+class Levels:
     def __init__(self):
         self.num_readings = 0
         self.bitwise_counts = {
@@ -58,7 +24,7 @@ class Diagnostics:
             self.bitwise_counts.setdefault(iteration, {0: 0, 1: 0})
             self.bitwise_counts[iteration][int(this_bit)] += 1
 
-    def bulk_input(self, report_loc="../assets/diagnostic_report.txt"):
+    def bulk_input(self, report_loc="./assets/diagnostic_report.txt"):
         with open(report_loc, 'r') as f:
             for line in f.readlines():
                 self.add_reading(line)
