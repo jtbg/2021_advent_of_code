@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/.idea/discord.xml
+/.idea/workspace.xml
