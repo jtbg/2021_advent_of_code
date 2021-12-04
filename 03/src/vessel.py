@@ -6,8 +6,7 @@ from coolname import generate
 class Vessel:
     def __init__(self):
         self.name = 'The ' + ' '.join(x.capitalize() for x in generate(2))
-        self.x_pos = 0
-        self.y_pos = 0
+        self.position = {'x': 0, 'y': 0, }
         self.odometer = 0
         self.diagnostics = Diagnostics()
 
@@ -15,24 +14,24 @@ class Vessel:
 class Submarine(Vessel):
     def __init__(self):
         super().__init__()
-        self.depth = 0
-        self.aim = 0
+        self.position['depth'] = 0
+        self.position['aim'] = 0
 
     def move(self, direction, magnitude):
         magnitude = int(magnitude)
         self.odometer += 1
         if direction == "forward":
-            self.x_pos += magnitude
-            self.depth += magnitude * self.aim
+            self.position['x'] += magnitude
+            self.position['depth'] += magnitude * self.position['aim']
         elif direction == "down":
-            self.aim += magnitude
+            self.position['aim'] += magnitude
         elif direction == "up":
-            self.aim -= magnitude
+            self.position['aim'] -= magnitude
         else:
             logging.error(f'''invalid movement {direction} {magnitude}''')
-        logging.debug(f'''
+            logging.debug(f'''
         Moved {direction} {magnitude}.
-            {self.__dict__}
+            {self.position.__dict__}
         ''')
 
 
@@ -52,25 +51,35 @@ class Diagnostics:
         }
         self.levels = {}
 
-    def gamma_level(self):
-        lvl_binary = ""
-        for pos in self.bitwise_counts:
-            lvl_binary = lvl_binary + str(max(pos, key=pos.get))
-        self.levels["gamma"] = int(lvl_binary, 2)
-
-    def epsilon_level(self):
-        lvl_binary = ""
-        for pos in self.bitwise_counts:
-            lvl_binary = lvl_binary + str(min(pos, key=pos.get))
-        self.levels["epsilon"] = int(lvl_binary, 2)
-
     def add_reading(self, new_reading):
         self.num_readings += 1
-        for iteration, this_bit in enumerate(list(new_reading)):
-            self.bitwise_counts.setdefault(iteration, {0: 0, 1: 0})[this_bit] += 1
+        reading = list(new_reading.strip())
+        for iteration, this_bit in enumerate(reading):
+            self.bitwise_counts.setdefault(iteration, {0: 0, 1: 0})
+            self.bitwise_counts[iteration][int(this_bit)] += 1
 
     def bulk_input(self, report_loc="../assets/diagnostic_report.txt"):
         with open(report_loc, 'r') as f:
             for line in f.readlines():
                 self.add_reading(line)
-        logging.DEBUG(f'''bulk file {report_loc} imported''')
+        logging.debug(f'''bulk file {report_loc} imported''')
+
+    def check_levels(self):
+        self.gamma()
+        self.epsilon()
+        self.levels['power'] = self.levels['gamma'] * self.levels['epsilon']
+        return self.levels
+
+    def gamma(self):
+        lvl_binary = ''
+        for key, counts in self.bitwise_counts.items():
+            lvl_binary += str(max(counts, key=counts.get))
+        logging.debug(f'''gamma level calculated: {lvl_binary}''')
+        self.levels["gamma"] = int(lvl_binary, 2)
+
+    def epsilon(self):
+        lvl_binary = ""
+        for key, counts in self.bitwise_counts.items():
+            lvl_binary += str(min(counts, key=counts.get))
+        logging.debug(f'''epsilon level calculated: {lvl_binary}''')
+        self.levels["epsilon"] = int(lvl_binary, 2)
