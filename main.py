@@ -1,5 +1,4 @@
 import logging
-import sys
 
 from sailing import vessel, journey, instruments, diagnostics
 
@@ -11,15 +10,20 @@ class DailyRunner:
     def day03(self):
         my_levels = diagnostics.Levels()
         my_levels.bulk_input()
-        print(my_levels.check_levels())
+        my_levels.check_levels()
+        print(f'''
+        oxygen: {my_levels.levels['oxygen']}
+        co2 scrubbers: {my_levels.levels['co2_scrubbers']}
+        life support: {my_levels.levels['life_support']}
+        ''')
 
     def day02(self):
         my_vessel = vessel.Submarine()
         my_course = journey.Course()
         my_course.import_course()
-        my_journey = journey.SetSail(vessel=my_vessel, course=my_course)
+        journey.SetSail(vessel=my_vessel, course=my_course)
         x, d = my_vessel.position['x'], my_vessel.position['depth']
-        print(f'''x: {x}\ndepth: {d}\nroduct: {x * d}''')
+        print(f'''x: {x}\ndepth: {d}\nproduct: {x * d}''')
 
     def day01(self):
         my_sonar = instruments.Sonar()
@@ -33,10 +37,10 @@ class DailyRunner:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(level=logging.DEBUG)
     today = DailyRunner()
     for task in today.completed_days:
         print(task)
         last = task
-    last = input(f'''Please select a day's task to run (default: {last}): ''') or last
+    # last = input(f'''Please select a day's task to run (default: {last}): ''') or last
     today.run(last)
