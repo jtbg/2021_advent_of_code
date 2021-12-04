@@ -23,4 +23,4 @@ running `main.py` will present the user with an option to execute any of the com
 |:-:| :-: | --:|
 |1| [Sonar Sweep](tasks/day01.md) |★★|
 |2| [Dive!](tasks/day02.md) |★★|
-|3| [Diagnostics](tasks/day03.md) |★|
+|3| [Diagnostics](tasks/day03.md) |★★|
