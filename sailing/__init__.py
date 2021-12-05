@@ -1,6 +1,7 @@
 __all__ = [
+    'bingo',
     'diagnostics',
-    'vessel',
-    'journey',
     'instruments',
+    'journey',
+    'vessel',
 ]

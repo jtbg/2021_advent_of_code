@@ -1,11 +1,17 @@
 import logging
 
-from sailing import vessel, journey, instruments, diagnostics
+from sailing import bingo, diagnostics, instruments, journey, vessel
 
 
 class DailyRunner:
     def __init__(self):
         self.completed_days = [attribute for attribute in dir(self) if callable(getattr(self, attribute)) and attribute.startswith('__') is False and attribute != 'run']
+
+    def day04(self):
+        my_game = bingo.Game()
+        my_game.bulk_import()
+        winning_board = my_game.cheat()
+        print(f'''board {winning_board.board_id} wins with a score of {winning_board.winning_score}''')
 
     def day03(self):
         my_levels = diagnostics.Levels()
@@ -37,7 +43,7 @@ class DailyRunner:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.WARNING)
     today = DailyRunner()
     for task in today.completed_days:
         print(task)
